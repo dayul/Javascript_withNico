@@ -1,0 +1,2 @@
+- ctrl + D + click : 일괄 변경
+- alt + click : 다중 커서 (수정)
