@@ -3,11 +3,27 @@ const toDoForm = document.getElementById("todo-form");
 const toDoInput = document.querySelector("#todo-form input");
 const toDoList = document.getElementById("todo-list");
 
+const TODOS_KEY = "todos";
+let toDos = [];         // 업데이트가 가능하도록 let
+
+function saveToDos() {
+    // Array를 String으로 변환해 저장
+    localStorage.setItem(TODOS_KEY, JSON.stringify(toDos));       
+}
+
 function handleToDoSubmit(event) {
     event.preventDefault();
     const newTodo = toDoInput.value;
     toDoInput.value = "";               // Input box을 비움 
-    paintToDo(newTodo);
+
+    const newTodoObj = {                // Object를 push하도록 준비
+        text: newTodo,
+        id: Date.now(),
+    };
+
+    toDos.push(newTodoObj);       // Array에 메세지를 저장
+    paintToDo(newTodoObj);
+    saveToDos();
 }
 
 function paintToDo(newTodo) {
@@ -36,3 +52,11 @@ function deleteToDo(event) {
 }
 
 toDoForm.addEventListener("submit", handleToDoSubmit);
+
+
+const savedToDos = localStorage.getItem(TODOS_KEY);
+if(savedToDos) {
+    const parseToDos = JSON.parse(savedToDos);
+    toDos = parseToDos;                  // 전에 local Storage에 있는 todo가 출력되도록 복원
+    parseToDos.forEach(paintToDo);       // 각각의 item에 대해서 출력
+}
